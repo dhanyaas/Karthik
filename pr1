@@ -1,0 +1,183 @@
+create table branch(b_id varchar(10) primary key,b_name varchar(20) not null,hod varchar(25));
+ 
+
+
+create table student(usn varchar(10) primary key,
+                     name varchar(20) not null,
+                     address varchar(30),
+                     b_id varchar(10) not null,
+                     sem char(3) not null,
+                     foreign key(b_id) references branch(b_id));
+ 
+create table book(book_id varchar(10) primary key,
+                 book_name varchar(20) not null,
+                 author_id  varchar(10) not null,
+                 publisher varchar(30) not null,
+                 b_id varchar(10) not null,
+                 foreign key(b_id) references branch(b_id),
+                 foreign key(author_id) references author(author_id));
+  
+create table author(author_id varchar(10) primary key,
+                    author_name varchar(20) not null,
+                    country varchar(25) not null,
+                    age int(3));
+ 
+create table barrow(usn varchar(10),
+                    book_id varchar(10),
+                    barrow_date date not null,
+                    primary key(usn,book_id),
+                    foreign key(usn) references student(usn),
+                    foreign key(book_id) references book(book_id)); 
+                    
+insert into branch values('E1','Mechanical','Dr.Mahesh');
+insert into branch values('E2','Civil','Dr.Asha');
+insert into branch values('E3','CS','Dr.Karthik');
+insert into branch values('E4','AI','Dr.Kishore');
+insert into branch values('M1','MCA','Dr.Vandana');
+insert into branch values('M2','MBA','Dr.Girish');
+
+insert into student values('VP0ME21','guru','ujire,belthangadi','E1','1');
+insert into student values('VP0ME24','harish','mysore','E1','4');
+insert into student values('VP0MC01','keerthi','ujire,dharmasthala','M1','2');
+insert into student values('VP0MC21','dhanu','ujire,bangalore','M1','2');
+insert into student values('VP0MC24','karthik','nehru nagara,puttur','M1','1');
+insert into student values('VP0MB21','mahesh','ujire,belthangadi','M2','1');
+insert into student values('VP0MB61','chandan','dharmasthala','M2','4');
+insert into student values('VP0CS21','kavya','ujire,belthangadi','E3','5');
+insert into student values('VP0AI09','guru','puttur','E4','3');
+insert into student values('VP0CV21','hari','ujire,belthangadi','E2','5');
+
+insert into author values('01','jhons','america',60);
+insert into author values('02','mahima','india',66);
+insert into author values('03','goerge','finland',50);
+insert into author values('04','gururaj','french',52);
+insert into author values('05','balaguru swami','india',52);
+
+insert into book values('boo1','fundametrals of c','05','shree devi','M1');
+
+insert into barrow values('VP0MC01','boo4','2022-06-01');
+
+
+querry:
+ select usn,name,address,s.b_id,b_name,sem,hod from student s,branch b where s.b_id=b.b_id and b_name='MCA' and sem='2';
+ 
+ select usn,name from student s,branch b where s.b_id=b.b_id and b_name='MCA' order by name desc;
+ select usn,name from student s,branch b where s.b_id=b.b_id and b_name='MCA' order by name;
+ 
+ select distinct  name from student s,barrow b where s.usn=b.usn;
+ 
+ select a.author_id,author_name,count(*)as total from author a,book b where a.author_id=b.author_id group by b.author_id;
+ -----------+----------------+-------+
+| author_id | author_name    | total |
++-----------+----------------+-------+
+| 01        | jhons          |     1 |
+| 02        | mahima         |     1 |
+| 03        | goerge         |     1 |
+| 04        | gururaj        |     1 |
+| 05        | balaguru swami |     2 |
++-----------+----------------+-------+
+
+ 
+select s.usn,s.name,b.b_name,bo.book_name,a.author_name,barrow_date from student s,branch b,book bo,author a,barrow ba where s.usn=ba.usn and s.b_id=b.b_id and ba.book_id=bo.book_id and bo.author_id=a.author_id and b.b_name='MCA' and sem='2';
++---------+---------+--------+-------------------+----------------+-------------+
+| usn     | name    | b_name | book_name         | author_name    | barrow_date |
++---------+---------+--------+-------------------+----------------+-------------+
+| VP0MC01 | keerthi | MCA    | mech tools        | jhons          | 2022-06-01  |
+| VP0MC21 | dhanu   | MCA    | fundametrals of c | balaguru swami | 2022-01-02  |
+| VP0MC21 | dhanu   | MCA    | algorithms        | balaguru swami | 2022-01-02  |
++---------+---------+--------+-------------------+----------------+-------------+
+3 rows in set (0.01 sec)
+
+select * from student;
++---------+---------+---------------------+------+-----+
+| usn     | name    | address             | b_id | sem |
++---------+---------+---------------------+------+-----+
+| VP0AI09 | guru    | puttur              | E4   | 3   |
+| VP0CS21 | kavya   | ujire,belthangadi   | E3   | 5   |
+| VP0CV21 | hari    | ujire,belthangadi   | E2   | 5   |
+| VP0MB21 | mahesh  | ujire,belthangadi   | M2   | 1   |
+| VP0MB61 | chandan | dharmasthala        | M2   | 4   |
+| VP0MC01 | keerthi | ujire,dharmasthala  | M1   | 2   |
+| VP0MC21 | dhanu   | ujire,bangalore     | M1   | 2   |
+| VP0MC24 | karthik | nehru nagara,puttur | M1   | 1   |
+| VP0ME21 | guru    | ujire,belthangadi   | E1   | 1   |
+| VP0ME24 | harish  | mysore              | E1   | 4   |
++---------+---------+---------------------+------+-----+
+10 rows in set (0.01 sec)
+
+select * from author;
++-----------+----------------+---------+------+
+| author_id | author_name    | country | age  |
++-----------+----------------+---------+------+
+| 01        | jhons          | america |   60 |
+| 02        | mahima         | india   |   66 |
+| 03        | goerge         | finland |   50 |
+| 04        | gururaj        | french  |   52 |
+| 05        | balaguru swami | india   |   52 |
++-----------+----------------+---------+------+
+5 rows in set (0.00 sec)
+
+select * from branch;
++------+------------+------------+
+| b_id | b_name     | hod        |
++------+------------+------------+
+| E1   | Mechanical | Dr.Mahesh  |
+| E2   | Civil      | Dr.Asha    |
+| E3   | CS         | Dr.Karthik |
+| E4   | AI         | Dr.Kishore |
+| M1   | MCA        | Dr.Vandana |
+| M2   | MBA        | Dr.Girish  |
++------+------------+------------+
+6 rows in set (0.00 sec)
+
+select * from book;
++---------+---------------------+-----------+-----------------+------+
+| book_id | book_name           | author_id | publisher       | b_id |
++---------+---------------------+-----------+-----------------+------+
+| boo1    | fundametrals of c   | 05        | shree devi      | M1   |
+| boo2    | fundametrals of c++ | 03        | pm books        | E3   |
+| boo3    | algorithms          | 05        | pm books        | M1   |
+| boo4    | mech tools          | 01        | pm books        | E1   |
+| boo5    | mech basics         | 04        | mahima printers | E1   |
+| boo6    | civil               | 02        | mahima printers | E2   |
++---------+---------------------+-----------+-----------------+------+
+6 rows in set (0.00 sec)
+
+select * from barrow;
++---------+---------+-------------+
+| usn     | book_id | barrow_date |
++---------+---------+-------------+
+| VP0CV21 | boo6    | 2022-06-02  |
+| VP0MC01 | boo4    | 2022-06-01  |
+| VP0MC21 | boo1    | 2022-01-02  |
+| VP0MC21 | boo3    | 2022-01-02  |
+| VP0ME24 | boo5    | 2022-03-20  |
++---------+---------+-------------+
+5 rows in set (0.00 sec)
+
+select name from student where usn not in (select usn from barrow);
++---------+
+| name    |
++---------+
+| guru    |
+| kavya   |
+| mahesh  |
+| chandan |
+| karthik |
+| guru    |
++---------+
+6 rows in set (0)
+
+select * from student where usn in(select usn from barrow group by usn having count(usn)>=2);
++---------+-------+-----------------+------+-----+
+| usn     | name  | address         | b_id | sem |
++---------+-------+-----------------+------+-----+
+| VP0MC21 | dhanu | ujire,bangalore | M1   | 2   |
++---------+-------+-----------------+------+-----+
+
+
+
+
+
+
+
