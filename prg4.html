@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+
+</head>
+
+<body>
+
+<script>
+
+   var str=prompt("Enter an string or number:");
+
+    if(parseInt(str))
+
+   {
+
+      var num,rev=0,rem;
+
+      num=parseInt(str);
+
+    while(num!=0)
+
+      {
+
+         rem=num%10;
+
+         num=parseInt(num/10);
+
+         rev=rev*10+rem;
+
+         
+
+      }
+
+      alert("Reverse of" +str+ "is"+rev);
+
+   }
+
+else 
+
+{
+
+       for(i=0;i<str.length;i++){
+
+          a=str[i];
+
+          if(a=='a' || a=='e' || a=='i' || a=='o'|| a=='u' || a=='A' || a=='E' || a=='O' || a=='U')
+
+          break;
+
+       }
+
+       if(i<str.length)
+
+       alert("it is present in the location is"+i);
+
+       else
+
+       alert("No owels present here");
+
+}
+
+  </script>
+
+   </body>
+
+</html>
